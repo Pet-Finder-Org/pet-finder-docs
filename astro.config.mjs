@@ -1,28 +1,36 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import {defineConfig} from 'astro/config';
 import starlight from '@astrojs/starlight';
+import rehypeMermaid from 'rehype-mermaid';
+import {brainDbAstro} from '@braindb/astro'
 
 // https://astro.build/config
 export default defineConfig({
-	integrations: [
-		starlight({
-			title: 'My Docs',
-			social: {
-				github: 'https://github.com/withastro/starlight',
-			},
-			sidebar: [
-				{
-					label: 'Guides',
-					items: [
-						// Each item here is one entry in the navigation menu.
-						{ label: 'Example Guide', slug: 'guides/example' },
-					],
-				},
-				{
-					label: 'Reference',
-					autogenerate: { directory: 'reference' },
-				},
-			],
-		}),
-	],
+    markdown: {
+        rehypePlugins: [[rehypeMermaid, {strategy: "img-svg", dark: true}],],
+    },
+    integrations: [
+        brainDbAstro(),
+        starlight({
+            title: 'Pet Finder',
+            lastUpdated: true,
+            defaultLocale: 'ptBr',
+            locales: {
+                ptBr: {
+                    label: 'Português (Brasil)',
+                    lang: 'pt-br',
+                },
+            },
+            sidebar: [
+                {
+                    label: 'Organizacional',
+                    autogenerate: {directory: 'organizational'},
+                },
+                {
+                    label: 'Aplicativos',
+                    autogenerate: {directory: 'apps'}
+                }
+            ],
+        }),
+    ],
 });
